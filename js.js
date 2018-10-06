@@ -71,7 +71,7 @@ function f(){
 		i.update()
 	}
 	if(Math.random()<1/10&&ents.length<1000){//Every 1/6 seconds
-		ents.push(new collectible(Math.random()*wh[0],Math.random()*wh[1]))
+		ents.push(new collectible(Math.random()*wh[0]*1/25,Math.random()*wh[1]*1/25,Math.floor(Math.random()*2)))
 	}
 }
 randcol=()=>"#"+Math.floor(Math.random()*16777216).toString(16).padStart(6,"0")
@@ -98,7 +98,14 @@ li.createServer(function(r, e){
 			datawr=Object.assign({"id":id},datawr)
 			break
 		case "/getdata":
-			
+			g=pardat.collect
+			if(g){
+				gid=parseInt(g.slice(1))
+				ents=ents.slice(0,gid).concat(ents.slice(gid+1))
+				for(i=0;i<ents.length;i++){
+					ents[i].id="E"+i
+				}
+			}
 			break
 		case "/leave":
 			
