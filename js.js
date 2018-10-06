@@ -88,7 +88,12 @@ li.createServer(function(r, e){
 	switch(parurl.pathname){
 		case "/join":
 			da=pardat
-			id=players.push({"name":da.name||"Anonymous","id":players.length,"fill":randhsl(100,45,240),"stroke":randhsl(100,35,240),"score":0})-1
+			id=players.push({"name":da.name||"Anonymous",
+			"id":players.length,
+			"fill":randhsl(100,45,240),
+			"stroke":randhsl(100,35,240),
+			"score":0
+			})-1
 			console.log("Join",da,parurl.pathname)
 			datawr=Object.assign({"id":id},datawr)
 			break
