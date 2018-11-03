@@ -1,4 +1,4 @@
-li=require('http');
+li=require('http')
 prl=require("url")
 resa=0
 resb=1
@@ -9,29 +9,35 @@ players=[]
 setInterval(f,16.6666666666)
 dtps=Math.pow(2,1/60)
 console.log(dtps)
-function building(x,y,w,h,r,fr,dps,pla){
+function building(x,y,w,h,ro,ty,r,fr,dps,pla,up,nam){//12 parameters
 	this.id="B"+buildings.length
 	this.pos=[x,y]
 	this.size=[w,h]
+	this.rot=ro
 	this.radius=r//Attack radius
 	this.fra=fr//Fire rate in seconds
 	this.dps=dps//Damage per second
 	this.tmr=0
 	this.player=pla
+	this.upd=up
+	this.type=ty
+	this.name=nam
 }
 building.prototype.inrange=function(x,y){
 	f=[x-this.pos[0],y-this.pos[1]]
 	return (f[0]*f[0]+f[1]*f[1])<(this.radius*this.radius)
 }
 building.prototype.update=function(){
-	for(i in ents){
-		if(this.prototype.inrange(i.pos[0],i.pos[1])&&this.tmr>=fra*60){
+	this.upd()
+	for(i of ents){
+		if(this.inrange(i.pos[0],i.pos[1])&&this.tmr>=this.fra*60){
 			this.shoot(i.pos[0],i.pos[1])
 			
 		}
 	}
 	this.tmr+=1
 }
+building.prototype.upd=function(x,y){}
 building.prototype.shoot=function(x,y){}
 function entity(x,y,velx,vely){
 	this.id="E"+ents.length
@@ -94,7 +100,6 @@ li.createServer(function(r, e){
 			"stroke":randhsl(100,35,240),
 			"score":0
 			})-1
-			console.log("Join",da,parurl.pathname)
 			datawr=Object.assign({"id":id},datawr)
 			break
 		case "/getdata":
@@ -105,6 +110,13 @@ li.createServer(function(r, e){
 				for(i=0;i<ents.length;i++){
 					ents[i].id="E"+i
 				}
+			}
+			bui=pardat.build
+			if(bui){
+				bui.update=Function.apply(undefined,bui.update)
+				bui.shoot=Function.apply(undefined,bui.shoot)
+				buic=new building(bui.pos[0],bui.pos[1],bui.size[0],bui.size[1],bui.rot,bui.type,bui.radius,bui.fra,bui.dps,players[pardat.id],bui.update,bui.name)
+				buildings.push(buic)
 			}
 			break
 		case "/leave":
