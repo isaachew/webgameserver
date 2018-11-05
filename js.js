@@ -4,24 +4,24 @@ resa=0
 resb=1
 wh=[25000,25000];
 buildings=[]
-ents=[]
+entities=[]
 players=[]
-setInterval(f,16.6666666666)
+setInterval(f,50/3)
 dtps=Math.pow(2,1/60)
 console.log(dtps)
-function building(x,y,w,h,ro,ty,r,fr,dps,pla,up,nam){//12 parameters
+function building(x,y,w,h,ro,ty,r,fr,pla,up,sho,nam){//12 parameters
 	this.id="B"+buildings.length
 	this.pos=[x,y]
 	this.size=[w,h]
 	this.rot=ro
 	this.radius=r//Attack radius
-	this.fra=fr//Fire rate in seconds
-	this.dps=dps//Damage per second
+	this.fra=fr*60//Fire rate in seconds, converted to frames
 	this.tmr=0
 	this.player=pla
-	this.upd=up
+	this.upd=up||(()=>{})
 	this.type=ty
 	this.name=nam
+	this.shoot=sho||(()=>{})
 }
 building.prototype.inrange=function(x,y){
 	f=[x-this.pos[0],y-this.pos[1]]
@@ -29,18 +29,24 @@ building.prototype.inrange=function(x,y){
 }
 building.prototype.update=function(){
 	this.upd()
-	for(i of ents){
-		if(this.inrange(i.pos[0],i.pos[1])&&this.tmr>=this.fra*60){
-			this.shoot(i.pos[0],i.pos[1])
-			
+	sents=entities.filter((a)=>this.inrange(a.pos[0],this.pos[1]))
+	sents.sort((en)=>{
+		f=[en.pos[0]-this.pos[0],en.pos[1]-this.pos[1]]
+		return (f[0]*f[0]+f[1]*f[1])
+	})
+	if(sents.length>0&&this.tmr>=this.fra){
+		ent=sents[sents.length-1]
+		if(sents.hasOwnProperty("player")||true){
+			eval("("+this.shoot+")(ent)")
 		}
+		this.tmr=0
 	}
 	this.tmr+=1
 }
-building.prototype.upd=function(x,y){}
-building.prototype.shoot=function(x,y){}
+building.prototype.upd=function(){}
+building.prototype.shoot=function(en){}
 function entity(x,y,velx,vely){
-	this.id="E"+ents.length
+	this.id="E"+entities.length
 	this.pos=[x,y]
 	this.vel=[velx,vely]
 }
@@ -76,8 +82,8 @@ function f(){
 	for(i of buildings){
 		i.update()
 	}
-	if(Math.random()<1/10&&ents.length<1000){//Every 1/6 seconds
-		ents.push(new collectible(Math.random()*wh[0],Math.random()*wh[1],Math.floor(Math.random()*2)))
+	if(Math.random()<1/10&&entities.length<2500){//Every 1/6 seconds
+		entities.push(new collectible(Math.random()*wh[0],Math.random()*wh[1],Math.floor(Math.random()*2)))
 	}
 }
 randcol=()=>"#"+Math.floor(Math.random()*16777216).toString(16).padStart(6,"0")
@@ -106,16 +112,14 @@ li.createServer(function(r, e){
 			g=pardat.collect
 			if(g){
 				gid=parseInt(g.slice(1))
-				ents=ents.slice(0,gid).concat(ents.slice(gid+1))
-				for(i=0;i<ents.length;i++){
-					ents[i].id="E"+i
+				entities=entities.slice(0,gid).concat(entities.slice(gid+1))
+				for(i=0;i<entities.length;i++){
+					entities[i].id="E"+i
 				}
 			}
 			bui=pardat.build
 			if(bui){
-				bui.update=Function.apply(undefined,bui.update)
-				bui.shoot=Function.apply(undefined,bui.shoot)
-				buic=new building(bui.pos[0],bui.pos[1],bui.size[0],bui.size[1],bui.rot,bui.type,bui.radius,bui.fra,bui.dps,players[pardat.id],bui.update,bui.name)
+				buic=new building(bui.pos[0],bui.pos[1],bui.size[0],bui.size[1],bui.rot,bui.type,bui.radius,bui.fra,players[pardat.id],Function.apply(undefined,bui.update),Function.apply(undefined,bui.shoot),bui.name)
 				buildings.push(buic)
 			}
 			break
@@ -124,7 +128,7 @@ li.createServer(function(r, e){
 	}
 	datawr=Object.assign(
 	{"buildings":buildings,
-	"entities":ents.map(a=>{a.type=a.type?a.type:a.__proto__.constructor.name;return a}),
+	"entities":entities.map(a=>{a.type=a.type?a.type:a.__proto__.constructor.name;return a}),
 	"players":players,
 	"bounds":wh},datawr)
 	e.write(JSON.stringify(datawr))
