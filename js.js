@@ -1,5 +1,7 @@
 li=require('http')
 prl=require("url")
+file=require("fs")
+pres=JSON.parse(file.readFileSync("pres.json"))
 resa=0
 resb=1
 wh=[25000,25000];
@@ -130,7 +132,9 @@ li.createServer(function(r, e){
 	{"buildings":buildings,
 	"entities":entities.map(a=>{a.type=a.type?a.type:a.__proto__.constructor.name;return a}),
 	"players":players,
-	"bounds":wh},datawr)
+	"bounds":wh,
+	"presets":pres
+	},datawr)
 	e.write(JSON.stringify(datawr))
 	e.end()
 }).listen(8080); //Listen on port 8080
