@@ -4,7 +4,7 @@ file=require("fs")
 pres=JSON.parse(file.readFileSync("pres.json"))
 resa=0
 resb=1
-wh=[25000,25000];
+wh=[15000,15000];
 buildings=[]
 entities=[]
 players=[]
@@ -47,10 +47,11 @@ building.prototype.update=function(){
 }
 building.prototype.upd=function(){}
 building.prototype.shoot=function(en){}
-function entity(x,y,velx,vely){
+function entity(x,y,velx,vely,rot){
 	this.id="E"+entities.length
 	this.pos=[x,y]
 	this.vel=[velx,vely]
+	this.rot=rot||0
 }
 entity.prototype.update=function(){
 	this.vel[0]/=dtps
@@ -59,12 +60,11 @@ entity.prototype.update=function(){
 	this.pos[1]+=this.vel[1]
 }
 class troop extends entity{
-	constructor(x,y,fr,dps,ar){
-		super(x,y,0,0)
+	constructor(x,y,rot,fr,dps,ar){
+		super(x,y,0,0,rot)
 		this.atr=ar//Attack range
 		this.fir=fr//Fire rate (seconds)
 		this.dps=dps//Damage per second
-		this.rot=0
 		this.player=pla
 	}
 }
@@ -96,7 +96,7 @@ li.createServer(function(r, e){
 	ur=r.url
 	li=["null","http://webgame-isaachew.c9users.io","https://webgame-isaachew.c9users.io"]
 	heo=r.headers.origin
-	e.writeHead(200,{'Content-Type':'application/json',"Access-Control-Allow-Origin":li.includes(heo)?heo:""})
+	e.writeHead(200,{'Content-Type':'application/json',"Access-Control-Allow-Origin":li.includes(heo)?heo:"*"})
 	parurl=prl.parse(ur,true)
 	pardat=JSON.parse(parurl.query.data)
 	switch(parurl.pathname){
