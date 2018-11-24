@@ -10,54 +10,59 @@ entities=[]
 players=[]
 setInterval(f,50/3)
 dtps=Math.pow(2,1/60)
-console.log(dtps)
-function building(x,y,w,h,ro,ty,r,fr,pla,up,sho,nam){//12 parameters
-	this.id="B"+buildings.length
-	this.pos=[x,y]
-	this.size=[w,h]
-	this.rot=ro
-	this.radius=r//Attack radius
-	this.fra=fr*60//Fire rate in seconds, converted to frames
-	this.tmr=0
-	this.player=pla
-	this.upd=up||(()=>{})
-	this.type=ty
-	this.name=nam
-	this.shoot=sho||(()=>{})
-}
-building.prototype.inrange=function(x,y){
-	f=[x-this.pos[0],y-this.pos[1]]
-	return (f[0]*f[0]+f[1]*f[1])<(this.radius*this.radius)
-}
-building.prototype.update=function(){
-	this.upd()
-	sents=entities.filter((a)=>this.inrange(a.pos[0],this.pos[1]))
-	sents.sort((en)=>{
-		f=[en.pos[0]-this.pos[0],en.pos[1]-this.pos[1]]
-		return (f[0]*f[0]+f[1]*f[1])
-	})
-	if(sents.length>0&&this.tmr>=this.fra){
-		ent=sents[sents.length-1]
-		if(sents.hasOwnProperty("player")||true){
-			eval("("+this.shoot+")(ent)")
-		}
+class building{
+	constructor(x,y,w,h,ro,ty,r,fr,pla,up,sho,nam){//12 parameters
+		this.id="B"+buildings.length
+		this.pos=[x,y]
+		this.size=[w,h]
+		this.rot=ro
+		this.radius=r//Attack radius
+		this.fra=fr*60//Fire rate in seconds, converted to frames
 		this.tmr=0
+		this.player=pla
+		this.upd=up||(()=>{})
+		this.type=ty
+		this.name=nam
+		this.shoot=sho||(()=>{})
 	}
-	this.tmr+=1
+	inrange(x,y){
+		var f=[x-this.pos[0]-this.size[0]/2,y-this.pos[1]-this.size[1]/2]
+		return (f[0]*f[0]+f[1]*f[1])<(this.radius*this.radius)
+	}
+	
+	update(){
+		this.upd()
+		var sents=entities.filter((a)=>this.inrange(a.pos[0],a.pos[1])&&a.type!="bullet")
+		sents.sort((ena,enb)=>{
+			var f=[ena.pos[0]-this.pos[0]-this.size[0]/2,ena.pos[1]-this.pos[1]-this.size[1]/2]
+			var g=[enb.pos[0]-this.pos[0]-this.size[0]/2,enb.pos[1]-this.pos[1]-this.size[1]/2]
+			return (g[0]*g[0]+g[1]*g[1])-(f[0]*f[0]+f[1]*f[1])
+		})
+		if(sents.length>0&&this.tmr>=this.fra){
+			var ent=sents[sents.length-1]
+			if(sents.hasOwnProperty("player")||true){
+				eval("("+this.shoot+").bind("+JSON.stringify(this)+")(ent)")
+			}
+			this.tmr=0
+		}
+		this.tmr+=1
+	}
+	upd(){}
+	shoot(en){}
 }
-building.prototype.upd=function(){}
-building.prototype.shoot=function(en){}
-function entity(x,y,velx,vely,rot){
-	this.id="E"+entities.length
-	this.pos=[x,y]
-	this.vel=[velx,vely]
-	this.rot=rot||0
-}
-entity.prototype.update=function(){
-	this.vel[0]/=dtps
-	this.vel[1]/=dtps
-	this.pos[0]+=this.vel[0]
-	this.pos[1]+=this.vel[1]
+class entity{
+	constructor(x,y,velx,vely,rot){
+		this.id="E"+entities.length
+		this.pos=[x,y]
+		this.vel=[velx,vely]
+		this.rot=rot||0
+	}
+    update(){
+		this.vel[0]/=dtps
+		this.vel[1]/=dtps
+		this.pos[0]+=this.vel[0]/60
+		this.pos[1]+=this.vel[1]/60
+	}
 }
 class troop extends entity{
 	constructor(x,y,rot,fr,dps,ar){
@@ -72,19 +77,25 @@ class collectible extends entity{
 	constructor(x,y,tor){
 		super(x,y,0,0)
 		this.type="coll"+tor
-		this.rot=0
 	}
 }
 class bullet extends entity{
 	constructor(x,y,vx,vy){
 		super(x,y,vx,vy)
 	}
+	update(){
+		this.pos[0]+=this.vel[0]/60
+		this.pos[1]+=this.vel[1]/60
+	}
 }
 function f(){
 	for(i of buildings){
 		i.update()
 	}
-	if(Math.random()<1/10&&entities.length<2500){//Every 1/6 seconds
+	for(i of entities){
+		i.update()
+	}
+	if(Math.random()<1/*/10/**/&&entities.length<250){//Every 1/6 seconds
 		entities.push(new collectible(Math.random()*wh[0],Math.random()*wh[1],Math.floor(Math.random()*2)))
 	}
 }
@@ -118,11 +129,16 @@ li.createServer(function(r, e){
 				for(i=0;i<entities.length;i++){
 					entities[i].id="E"+i
 				}
+				players[pardat.id].score+=50
 			}
 			bui=pardat.build
 			if(bui){
 				buic=new building(bui.pos[0],bui.pos[1],bui.size[0],bui.size[1],bui.rot,bui.type,bui.radius,bui.fra,players[pardat.id],Function.apply(undefined,bui.update),Function.apply(undefined,bui.shoot),bui.name)
 				buildings.push(buic)
+			}
+			ent=pardat.entity
+			if(ent){
+				entc=eval("new "+ent.type+"("+ent.pos[0]+","+ent.pos[1]+","+ent.vel[0]+","+ent.vel[1]+","+ent.rot+")")
 			}
 			break
 		case "/leave":
