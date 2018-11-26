@@ -32,7 +32,7 @@ class building{
 	
 	update(){
 		this.upd()
-		var sents=entities.filter((a)=>this.inrange(a.pos[0],a.pos[1])&&a.type!="bullet")
+		var sents=entities.filter((a)=>this.inrange(a.pos[0],a.pos[1])&&a.constructor.name!="bullet")
 		sents.sort((ena,enb)=>{
 			var f=[ena.pos[0]-this.pos[0]-this.size[0]/2,ena.pos[1]-this.pos[1]-this.size[1]/2]
 			var g=[enb.pos[0]-this.pos[0]-this.size[0]/2,enb.pos[1]-this.pos[1]-this.size[1]/2]
@@ -41,7 +41,7 @@ class building{
 		if(sents.length>0&&this.tmr>=this.fra){
 			var ent=sents[sents.length-1]
 			if(sents.hasOwnProperty("player")||true){
-				eval("("+this.shoot+").bind("+JSON.stringify(this)+")(ent)")
+				eval("("+this.shoot+").bind("+JSON.stringify(this)+")("+JSON.stringify(ent)+")")
 			}
 			this.tmr=0
 		}
@@ -117,7 +117,8 @@ li.createServer(function(r, e){
 			"id":players.length,
 			"fill":randhsl(100,45,240),
 			"stroke":randhsl(100,35,240),
-			"score":0
+			"score":0,
+			"resources":[10000000000,10000000000]
 			})-1
 			datawr=Object.assign({"id":id},datawr)
 			break
@@ -134,7 +135,11 @@ li.createServer(function(r, e){
 			bui=pardat.build
 			if(bui){
 				buic=new building(bui.pos[0],bui.pos[1],bui.size[0],bui.size[1],bui.rot,bui.type,bui.radius,bui.fra,players[pardat.id],Function.apply(undefined,bui.update),Function.apply(undefined,bui.shoot),bui.name)
-				buildings.push(buic)
+				//if((players[pardat.id].resources[0]>bui.cost[0])&&(players[pardat.id].resources[1]>bui.cost[1])){
+					buildings.push(buic)
+					players[pardat.id].resources[0]-=bui.cost[0]
+					players[pardat.id].resources[1]-=bui.cost[1]
+				//}
 			}
 			ent=pardat.entity
 			if(ent){
