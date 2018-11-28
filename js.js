@@ -115,8 +115,8 @@ li.createServer(function(r, e){
 			da=pardat
 			id=players.push({"name":da.name||"Anonymous",
 			"id":players.length,
-			"fill":randhsl(100,45,240),
-			"stroke":randhsl(100,35,240),
+			"fill":randhsl(80,45,240),
+			"stroke":randhsl(80,35,240),
 			"score":0,
 			"resources":[10000000000,10000000000]
 			})-1
