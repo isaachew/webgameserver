@@ -11,9 +11,9 @@
 "size":[25,25],
 "radius":300,
 "fra":1,
-"update":[""],
+"update":["players[this.player.id].resources[0]+=10"],
 "shoot":[""],
-"cost":[0,0]
+"cost":[10,0]
 },{"name":"",
 "type":"CD",
 "size":[25,25],

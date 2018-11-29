@@ -118,7 +118,8 @@ li.createServer(function(r, e){
 			"fill":randhsl(80,45,240),
 			"stroke":randhsl(80,35,240),
 			"score":0,
-			"resources":[10000000000,10000000000]
+			"resources":[10,0],
+			"placed":false
 			})-1
 			datawr=Object.assign({"id":id},datawr)
 			break
@@ -135,15 +136,17 @@ li.createServer(function(r, e){
 			bui=pardat.build
 			if(bui){
 				buic=new building(bui.pos[0],bui.pos[1],bui.size[0],bui.size[1],bui.rot,bui.type,bui.radius,bui.fra,players[pardat.id],Function.apply(undefined,bui.update),Function.apply(undefined,bui.shoot),bui.name)
-				if((players[pardat.id].resources[0]>bui.cost[0])&&(players[pardat.id].resources[1]>bui.cost[1])){
+				if((players[pardat.id].resources[0]>=bui.cost[0])&&(players[pardat.id].resources[1]>=bui.cost[1])){
 					buildings.push(buic)
 					players[pardat.id].resources[0]-=bui.cost[0]
 					players[pardat.id].resources[1]-=bui.cost[1]
+					players[pardat.id].placed=true
 				}
 			}
 			ent=pardat.entity
 			if(ent){
 				entc=eval("new "+ent.type+"("+ent.pos[0]+","+ent.pos[1]+","+ent.vel[0]+","+ent.vel[1]+","+ent.rot+")")
+				entities.push(entc)
 			}
 			break
 		case "/leave":
