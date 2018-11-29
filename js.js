@@ -11,7 +11,7 @@ players=[]
 setInterval(f,50/3)
 dtps=Math.pow(2,1/60)
 class building{
-	constructor(x,y,w,h,ro,ty,r,fr,pla,up,sho,nam){//12 parameters
+	constructor(x,y,w,h,ro,ty,r,fr,pla,up,sho,nam,hp){//12 parameters
 		this.id="B"+buildings.length
 		this.pos=[x,y]
 		this.size=[w,h]
@@ -24,6 +24,8 @@ class building{
 		this.type=ty
 		this.name=nam
 		this.shoot=sho||(()=>{})
+		this.hp=hp||1000
+		this.maxhp=this.hp
 	}
 	inrange(x,y){
 		var f=[x-this.pos[0]-this.size[0]/2,y-this.pos[1]-this.size[1]/2]
@@ -95,7 +97,7 @@ function f(){
 	for(i of entities){
 		i.update()
 	}
-	if(Math.random()<1/*/10/**/&&entities.length<250){//Every 1/6 seconds
+	if(Math.random()<1/10&&entities.length<500){//Every 1/6 seconds
 		entities.push(new collectible(Math.random()*wh[0],Math.random()*wh[1],Math.floor(Math.random()*2)))
 	}
 }
@@ -118,7 +120,7 @@ li.createServer(function(r, e){
 			"fill":randhsl(80,45,240),
 			"stroke":randhsl(80,35,240),
 			"score":0,
-			"resources":[10,0],
+			"resources":[0,0],
 			"placed":false
 			})-1
 			datawr=Object.assign({"id":id},datawr)
@@ -127,11 +129,13 @@ li.createServer(function(r, e){
 			g=pardat.collect
 			if(g){
 				gid=parseInt(g.slice(1))
-				entities=entities.slice(0,gid).concat(entities.slice(gid+1))
+				ty=entities[gid].type
+				players[pardat.id].resources[ty[ty.length-1]]+=10
+				entities.splice(gid,1)
 				for(i=0;i<entities.length;i++){
 					entities[i].id="E"+i
 				}
-				players[pardat.id].score+=50
+				players[pardat.id].score+=1
 			}
 			bui=pardat.build
 			if(bui){
