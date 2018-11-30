@@ -149,7 +149,7 @@ li.createServer(function(r, e){
 			}
 			ent=pardat.entity
 			if(ent){
-				entc=eval("new "+ent.type+"("+ent.pos[0]+","+ent.pos[1]+","+ent.vel[0]+","+ent.vel[1]+","+ent.rot+")")
+				entc=eval("new "+ent.type+"("+ent.params.join(",")+")")
 				entities.push(entc)
 			}
 			break
