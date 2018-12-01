@@ -49,6 +49,10 @@ class building{
 		}
 		this.tmr+=1
 	}
+	
+	upgrade(){
+		console.log("upgrade")
+	}
 	upd(){}
 	shoot(en){}
 }
@@ -151,6 +155,13 @@ li.createServer(function(r, e){
 			if(ent){
 				entc=eval("new "+ent.type+"("+ent.params.join(",")+")")
 				entities.push(entc)
+			}
+			upgr=pardat.upgrade
+			if(upgr){
+				bui=buildings[upgr.slice(1)]
+				if(bui.player.id==pardat.id){
+					bui.upgrade()
+				}
 			}
 			break
 		case "/leave":
