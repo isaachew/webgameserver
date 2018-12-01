@@ -11,7 +11,7 @@ players=[]
 setInterval(f,50/3)
 dtps=Math.pow(2,1/60)
 class building{
-	constructor(x,y,w,h,ro,ty,r,fr,pla,up,sho,nam,hp){//12 parameters
+	constructor(x,y,w,h,ro,ty,r,fr,pla,up,sho,nam,hp,nlevs){//12 parameters
 		this.id="B"+buildings.length
 		this.pos=[x,y]
 		this.size=[w,h]
@@ -21,11 +21,14 @@ class building{
 		this.tmr=0
 		this.player=pla
 		this.upd=up||(()=>{})
+		this.ty=ty
 		this.type=ty
 		this.name=nam
 		this.shoot=sho||(()=>{})
 		this.hp=hp||1000
 		this.maxhp=this.hp
+		this.level=1
+		this.numlevels=nlevs
 	}
 	inrange(x,y){
 		var f=[x-this.pos[0]-this.size[0]/2,y-this.pos[1]-this.size[1]/2]
@@ -52,6 +55,21 @@ class building{
 	
 	upgrade(){
 		console.log("upgrade")
+		var allc=pres.find((el)=>(el[0].type===this.ty))[this.level]
+		console.log(JSON.stringify(allc))
+		try{
+			for(i in allc){
+				console.log(i,allc[i])
+				if(["shoot","update"].includes(i)){
+					this[i]=Function.apply(null,allc[i])
+				}else{
+					this[i]=allc[i]
+				}
+			}
+		}catch(err){
+			console.log("err")
+		}
+		this.level+=1
 	}
 	upd(){}
 	shoot(en){}
