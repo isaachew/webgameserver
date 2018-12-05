@@ -22,7 +22,7 @@
 "update":["players[this.player.id].resources[1]+=0.005;players[this.player.id].resources[1]=Math.round(players[this.player.id].resources[1]*200)/200"],
 "shoot":[""],
 "cost":[50,50]
-}],[{"name":"",
+}],[{"name":"name",
 "type":"CE",
 "size":[25,25],
 "radius":300,
@@ -38,7 +38,8 @@
 "fra":1,
 "update":[""],
 "shoot":[""],
-"cost":[0,0]
+"cost":[0,0],
+"train":[]
 }],[{"name":"",
 "type":"CG",
 "size":[100,100],

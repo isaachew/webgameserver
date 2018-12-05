@@ -29,6 +29,8 @@ class building{
 		this.maxhp=this.hp
 		this.level=1
 		this.numlevels=nlevs
+		buildings.push(this)
+		console.log(this)
 	}
 	inrange(x,y){
 		var f=[x-this.pos[0]-this.size[0]/2,y-this.pos[1]-this.size[1]/2]
@@ -161,9 +163,8 @@ li.createServer(function(r, e){
 			}
 			bui=pardat.build
 			if(bui){
-				buic=new building(bui.pos[0],bui.pos[1],bui.size[0],bui.size[1],bui.rot,bui.type,bui.radius,bui.fra,players[pardat.id],Function.apply(undefined,bui.update),Function.apply(undefined,bui.shoot),bui.name)
 				if((players[pardat.id].resources[0]>=bui.cost[0])&&(players[pardat.id].resources[1]>=bui.cost[1])){
-					buildings.push(buic)
+					buic=new building(bui.pos[0],bui.pos[1],bui.size[0],bui.size[1],bui.rot,bui.type,bui.radius,bui.fra,players[pardat.id],Function.apply(undefined,bui.update),Function.apply(undefined,bui.shoot),bui.name)
 					players[pardat.id].resources[0]-=bui.cost[0]
 					players[pardat.id].resources[1]-=bui.cost[1]
 					players[pardat.id].placed=true
