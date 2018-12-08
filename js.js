@@ -73,6 +73,13 @@ class building{
 		}
 		this.level+=1
 	}
+	remove(){
+		console.log("remove",this)
+		buildings.splice(this.id,1)
+		for(i=0;i<buildings.length;i++){
+			buildings[i].id="E"+i
+		}
+	}
 	upd(){}
 	shoot(en){}
 }
@@ -181,6 +188,11 @@ li.createServer(function(r, e){
 				if(bui.player.id==pardat.id){
 					bui.upgrade()
 				}
+			}
+			sell=pardat.sell
+			if(sell){
+				bui=buildings[sell.slice(1)]
+				bui.remove()
 			}
 			break
 		case "/leave":
