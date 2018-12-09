@@ -193,6 +193,8 @@ li.createServer(function(r, e){
 			if(sell){
 				bui=buildings[sell.slice(1)]
 				bui.remove()
+				players[pardat.id].resources[0]+=bui.cost[0]/2
+				players[pardat.id].resources[1]+=bui.cost[1]/2
 			}
 			break
 		case "/leave":
