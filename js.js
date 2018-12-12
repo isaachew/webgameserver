@@ -2,6 +2,7 @@ li=require('http')
 prl=require("url")
 file=require("fs")
 pres=JSON.parse(file.readFileSync("pres.json"))
+tpres=JSON.parse(file.readFileSync("tpres.json"))
 resa=0
 resb=1
 wh=[15000,15000];
@@ -11,7 +12,7 @@ players=[]
 setInterval(f,50/3)
 dtps=Math.pow(2,1/60)
 class building{
-	constructor(x,y,w,h,ro,ty,r,fr,pla,up,sho,nam,hp,nlevs){//12 parameters
+	constructor(x,y,w,h,ro,ty,r,fr,pla,up,sho,nam,hp,nlevs,cosa,cosb){//12 parameters
 		this.id="B"+buildings.length
 		this.pos=[x,y]
 		this.size=[w,h]
@@ -29,8 +30,8 @@ class building{
 		this.maxhp=this.hp
 		this.level=1
 		this.numlevels=nlevs
+		this.cost=[cosa,cosb]
 		buildings.push(this)
-		console.log(this)
 	}
 	inrange(x,y){
 		var f=[x-this.pos[0]-this.size[0]/2,y-this.pos[1]-this.size[1]/2]
@@ -77,7 +78,7 @@ class building{
 		console.log("remove",this)
 		buildings.splice(this.id,1)
 		for(i=0;i<buildings.length;i++){
-			buildings[i].id="E"+i
+			buildings[i].id="B"+i
 		}
 	}
 	upd(){}
@@ -98,12 +99,16 @@ class entity{
 	}
 }
 class troop extends entity{
-	constructor(x,y,rot,fr,dps,ar){
-		super(x,y,0,0,rot)
-		this.atr=ar//Attack range
+	constructor(x,y,ro,ty,r,fr,pla,ai,nam,hp,levs){
+		super(x,y,0,0,ro)
+		this.atr=r//Attack range
 		this.fir=fr//Fire rate (seconds)
 		this.dps=dps//Damage per second
 		this.player=pla
+		this.nlevs=levs
+		this.level=1
+		this.type=ty
+		this.ty=ty
 	}
 }
 class collectible extends entity{
@@ -171,7 +176,7 @@ li.createServer(function(r, e){
 			bui=pardat.build
 			if(bui){
 				if((players[pardat.id].resources[0]>=bui.cost[0])&&(players[pardat.id].resources[1]>=bui.cost[1])){
-					new building(bui.pos[0],bui.pos[1],bui.size[0],bui.size[1],bui.rot,bui.type,bui.radius,bui.fra,players[pardat.id],Function.apply(undefined,bui.update),Function.apply(undefined,bui.shoot),bui.name)
+					new building(bui.pos[0],bui.pos[1],bui.size[0],bui.size[1],bui.rot,bui.type,bui.radius,bui.fra,players[pardat.id],Function.apply(undefined,bui.update),Function.apply(undefined,bui.shoot),bui.name,bui.hp,bui.levs,bui.cost[0],bui.cost[1])
 					players[pardat.id].resources[0]-=bui.cost[0]
 					players[pardat.id].resources[1]-=bui.cost[1]
 					players[pardat.id].placed=true
@@ -196,6 +201,11 @@ li.createServer(function(r, e){
 				players[pardat.id].resources[0]+=bui.cost[0]/2
 				players[pardat.id].resources[1]+=bui.cost[1]/2
 			}
+			trp=pardat.troop
+			if(trp){
+				troop(trp.pos[0],trp.pos[1],Math.random()*2*Math.PI*0,trp.type,trp.radius,trp.fr,pla,trp.ai,trp.name,trp.hp,trp.levs)
+				console.log(entities[-1])
+			}
 			break
 		case "/leave":
 			
@@ -205,7 +215,8 @@ li.createServer(function(r, e){
 	"entities":entities.map(a=>{a.type=a.type?a.type:a.__proto__.constructor.name;return a}),
 	"players":players,
 	"bounds":wh,
-	"presets":pres
+	"presets":pres,
+	"troops":tpres
 	},datawr)
 	e.write(JSON.stringify(datawr))
 	e.end()
