@@ -12,7 +12,7 @@ players=[]
 setInterval(f,50/3)
 dtps=Math.pow(2,1/60)
 class building{
-	constructor(x,y,w,h,ro,ty,r,fr,pla,up,sho,nam,hp,nlevs,cosa,cosb){//12 parameters
+	constructor(x,y,w,h,ro,ty,r,fr,pla,up,sho,nam,hp,nlevs,cosa,cosb,troops){//12 parameters
 		this.id="B"+buildings.length
 		this.pos=[x,y]
 		this.size=[w,h]
@@ -31,6 +31,7 @@ class building{
 		this.level=1
 		this.numlevels=nlevs
 		this.cost=[cosa,cosb]
+		this.troops=troops
 		buildings.push(this)
 	}
 	inrange(x,y){
@@ -176,7 +177,7 @@ li.createServer(function(r, e){
 			bui=pardat.build
 			if(bui){
 				if((players[pardat.id].resources[0]>=bui.cost[0])&&(players[pardat.id].resources[1]>=bui.cost[1])){
-					new building(bui.pos[0],bui.pos[1],bui.size[0],bui.size[1],bui.rot,bui.type,bui.radius,bui.fra,players[pardat.id],Function.apply(undefined,bui.update),Function.apply(undefined,bui.shoot),bui.name,bui.hp,bui.levs,bui.cost[0],bui.cost[1])
+					new building(bui.pos[0],bui.pos[1],bui.size[0],bui.size[1],bui.rot,bui.type,bui.radius,bui.fra,players[pardat.id],Function.apply(undefined,bui.update),Function.apply(undefined,bui.shoot),bui.name,bui.hp,bui.levs,bui.cost[0],bui.cost[1],bui.troops)
 					players[pardat.id].resources[0]-=bui.cost[0]
 					players[pardat.id].resources[1]-=bui.cost[1]
 					players[pardat.id].placed=true
