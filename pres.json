@@ -43,7 +43,7 @@
 "update":[""],
 "shoot":[""],
 "cost":[0,0],
-"troops":[],
+"troops":[1,1,1,1,1,1,1,1,1],
 "levs":1
 }],[{"name":"",
 "type":"CG",
