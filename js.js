@@ -2,7 +2,6 @@ li=require('http')
 prl=require("url")
 file=require("fs")
 pres=JSON.parse(file.readFileSync("pres.json"))
-tpres=JSON.parse(file.readFileSync("tpres.json"))
 resa=0
 resb=1
 wh=[15000,15000];
@@ -77,7 +76,7 @@ class building{
 	}
 	remove(){
 		console.log("remove",this)
-		buildings.splice(this.id,1)
+		buildings.splice(this.id.slice(1),1)
 		for(i=0;i<buildings.length;i++){
 			buildings[i].id="B"+i
 		}
@@ -100,7 +99,7 @@ class entity{
 	}
 }
 class troop extends entity{
-	constructor(x,y,ro,ty,r,fr,pla,ai,nam,hp,levs){
+	constructor(x,y,ro,ty,r,fr,pla,ai,nam,hp,levs,size){
 		super(x,y,0,0,ro)
 		this.atr=r//Attack range
 		this.fir=fr//Fire rate (seconds)
@@ -110,6 +109,7 @@ class troop extends entity{
 		this.level=1
 		this.type=ty
 		this.ty=ty
+		this.size=size
 	}
 }
 class collectible extends entity{
@@ -198,13 +198,14 @@ li.createServer(function(r, e){
 			sell=pardat.sell
 			if(sell){
 				bui=buildings[sell.slice(1)]
+				console.log(sell)
 				bui.remove()
 				players[pardat.id].resources[0]+=bui.cost[0]/2
 				players[pardat.id].resources[1]+=bui.cost[1]/2
 			}
 			trp=pardat.troop
 			if(trp){
-				troop(trp.pos[0],trp.pos[1],Math.random()*2*Math.PI*0,trp.type,trp.radius,trp.fr,pla,trp.ai,trp.name,trp.hp,trp.levs)
+				troop(trp.pos[0],trp.pos[1],Math.random()*2*Math.PI*0,trp.type,trp.radius,trp.fr,pla,Function.apply(null,trp.ai),trp.name,trp.hp,trp.levs,trp.size)
 				console.log(entities[-1])
 			}
 			break
@@ -216,8 +217,7 @@ li.createServer(function(r, e){
 	"entities":entities.map(a=>{a.type=a.type?a.type:a.__proto__.constructor.name;return a}),
 	"players":players,
 	"bounds":wh,
-	"presets":pres,
-	"troops":tpres
+	"presets":pres
 	},datawr)
 	e.write(JSON.stringify(datawr))
 	e.end()
