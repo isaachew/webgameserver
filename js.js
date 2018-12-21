@@ -11,7 +11,7 @@ players=[]
 setInterval(f,50/3)
 dtps=Math.pow(2,1/60)
 class building{
-	constructor(x,y,w,h,ro,ty,r,fr,pla,up,sho,nam,hp,nlevs,cosa,cosb,troops){//12 parameters
+	constructor(x,y,w,h,ro,ty,r,fr,pla,up,sho,nam,hp,nlevs,cosa,cosb,troops){//17 parameters
 		this.id="B"+buildings.length
 		this.pos=[x,y]
 		this.size=[w,h]
@@ -103,13 +103,16 @@ class troop extends entity{
 		super(x,y,0,0,ro)
 		this.atr=r//Attack range
 		this.fir=fr//Fire rate (seconds)
-		this.dps=dps//Damage per second
 		this.player=pla
 		this.nlevs=levs
 		this.level=1
 		this.type=ty
 		this.ty=ty
 		this.size=size
+		this.hp=hp
+		this.maxhp=hp
+		this.ai=ai
+		this.attacking=undefined
 	}
 }
 class collectible extends entity{
@@ -119,7 +122,7 @@ class collectible extends entity{
 	}
 }
 class bullet extends entity{
-	constructor(x,y,vx,vy){
+	constructor(x,y,vx,vy,type){
 		super(x,y,vx,vy)
 	}
 	update(){
@@ -205,8 +208,8 @@ li.createServer(function(r, e){
 			}
 			trp=pardat.troop
 			if(trp){
-				troop(trp.pos[0],trp.pos[1],Math.random()*2*Math.PI*0,trp.type,trp.radius,trp.fr,pla,Function.apply(null,trp.ai),trp.name,trp.hp,trp.levs,trp.size)
-				console.log(entities[-1])
+				entities.push(new troop(trp.pos[0],trp.pos[1],Math.random()*2*Math.PI*0,trp.type,trp.radius,trp.fr,players[pardat.id],Function.apply(null,trp.ai),trp.name,trp.hp,trp.levs,trp.size))
+				console.log(entities[entities.length-1])
 			}
 			break
 		case "/leave":
