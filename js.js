@@ -40,7 +40,7 @@ class building{
 	
 	update(){
 		this.upd()
-		var sents=entities.filter((a)=>this.inrange(a.pos[0],a.pos[1])&&a.constructor.name!="bullet")
+		var sents=entities.filter((a)=>this.inrange(a.pos[0],a.pos[1])&&a.constructor.name!="bullet"&&a.hasOwnProperty("player")&&a.player!=this.player)
 		sents.sort((ena,enb)=>{
 			var f=[ena.pos[0]-this.pos[0]-this.size[0]/2,ena.pos[1]-this.pos[1]-this.size[1]/2]
 			var g=[enb.pos[0]-this.pos[0]-this.size[0]/2,enb.pos[1]-this.pos[1]-this.size[1]/2]
@@ -48,9 +48,7 @@ class building{
 		})
 		if(sents.length>0&&this.tmr>=this.fra){
 			var ent=sents[sents.length-1]
-			if(sents.hasOwnProperty("player")||true){
-				eval("("+this.shoot+").bind("+JSON.stringify(this)+")("+JSON.stringify(ent)+")")
-			}
+			eval("("+this.shoot+").bind("+JSON.stringify(this)+")("+JSON.stringify(ent)+")")
 			this.tmr=0
 		}
 		this.tmr+=1
@@ -203,12 +201,12 @@ li.createServer(function(r, e){
 				bui=buildings[sell.slice(1)]
 				console.log(sell)
 				bui.remove()
-				players[pardat.id].resources[0]+=bui.cost[0]/2
-				players[pardat.id].resources[1]+=bui.cost[1]/2
+				players[pardat.id].resources[0]+=3*bui.cost[0]/4
+				players[pardat.id].resources[1]+=3*bui.cost[1]/4
 			}
 			trp=pardat.troop
 			if(trp){
-				entities.push(new troop(trp.pos[0],trp.pos[1],Math.random()*2*Math.PI*0,trp.type,trp.radius,trp.fr,players[pardat.id],Function.apply(null,trp.ai),trp.name,trp.hp,trp.levs,trp.size))
+				entities.push(new troop(trp.pos[0],trp.pos[1],Math.random()*360,trp.type,trp.radius,trp.fr,players[pardat.id],Function.apply(null,trp.ai),trp.name,trp.hp,trp.levs,trp.size))
 				console.log(entities[entities.length-1])
 			}
 			break
