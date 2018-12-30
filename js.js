@@ -206,8 +206,10 @@ li.createServer(function(r, e){
 			}
 			trp=pardat.troop
 			if(trp){
-				if(players[pardat.id].resources[0]>trp.cost[0]&&players[pardat.id].resources[1]>trp.cost[1]){
+				if(players[pardat.id].resources[0]>=trp.cost[0]&&players[pardat.id].resources[1]>=trp.cost[1]){
 					entities.push(new troop(trp.pos[0],trp.pos[1],Math.random()*360,trp.type,trp.radius,trp.fr,players[pardat.id],Function.apply(null,trp.ai),trp.name,trp.hp,trp.levs,trp.size))
+					players[pardat.id].resources[0]-=trp.cost[0]
+					players[pardat.id].resources[1]-=trp.cost[1]
 				}
 				console.log(entities[entities.length-1])
 			}
