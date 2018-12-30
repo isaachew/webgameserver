@@ -135,7 +135,7 @@ function f(){
 	for(i of entities){
 		i.update()
 	}
-	if(Math.random()<1/10&&entities.length<500){//Every 1/6 seconds
+	if(Math.random()<1/10&&entities.length<1000){//Every 1/6 seconds
 		entities.push(new collectible(Math.random()*wh[0],Math.random()*wh[1],Math.floor(Math.random()*2)))
 	}
 }
@@ -206,7 +206,9 @@ li.createServer(function(r, e){
 			}
 			trp=pardat.troop
 			if(trp){
-				entities.push(new troop(trp.pos[0],trp.pos[1],Math.random()*360,trp.type,trp.radius,trp.fr,players[pardat.id],Function.apply(null,trp.ai),trp.name,trp.hp,trp.levs,trp.size))
+				if(players[pardat.id].resources[0]>trp.cost[0]&&players[pardat.id].resources[1]>trp.cost[1]){
+					entities.push(new troop(trp.pos[0],trp.pos[1],Math.random()*360,trp.type,trp.radius,trp.fr,players[pardat.id],Function.apply(null,trp.ai),trp.name,trp.hp,trp.levs,trp.size))
+				}
 				console.log(entities[entities.length-1])
 			}
 			break
