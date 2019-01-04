@@ -4,7 +4,7 @@ file=require("fs")
 pres=JSON.parse(file.readFileSync("pres.json"))
 resa=0
 resb=1
-wh=[15000,15000];
+wh=[1500,1500];
 buildings=[]
 entities=[]
 players=[]
@@ -106,7 +106,7 @@ class troop extends entity{
 		this.level=1
 		this.type=ty
 		this.ty=ty
-		this.size=size
+		this.size=[size,size]
 		this.hp=hp
 		this.maxhp=hp
 		this.ai=ai
@@ -120,12 +120,34 @@ class collectible extends entity{
 	}
 }
 class bullet extends entity{
-	constructor(x,y,vx,vy,type){
+	constructor(x,y,vx,vy,type,plr){
 		super(x,y,vx,vy)
+		this.type=type
+		this.player=plr
+		this.size=[1,1]
 	}
 	update(){
 		this.pos[0]+=this.vel[0]/60
 		this.pos[1]+=this.vel[1]/60
+		var es=buildings.concat(entities).filter((n)=>{
+			if(n.constructor.name=="bullet"||n.type.slice(0,4)=="coll"){
+				return false
+			}
+			let thx=this.pos[0]+this.size[0]/2
+			let thy=this.pos[1]+this.size[1]/2
+			let eb=[n.pos[0],n.pos[1],n.pos[0]+n.size[0],n.pos[1]+n.size[1]]
+			return thx>eb[0]&&thy>eb[1]&&thx<eb[2]&&thy<eb[3]&&n.player
+		})
+		for(var el of es){
+			console.log("bullet touch",el)
+			let k=el.id.slice(1)
+			if(el.id[0]==="E"){
+				entities[k].hp-=50
+			}else{
+				buildings[k].hp-=50
+			}
+		}
+		
 	}
 }
 function f(){
@@ -183,11 +205,6 @@ li.createServer(function(r, e){
 					players[pardat.id].resources[1]-=bui.cost[1]
 					players[pardat.id].placed=true
 				}
-			}
-			ent=pardat.entity
-			if(ent){
-				entc=eval("new "+ent.type+"("+ent.params.join(",")+")")
-				entities.push(entc)
 			}
 			upgr=pardat.upgrade
 			if(upgr){
