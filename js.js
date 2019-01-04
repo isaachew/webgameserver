@@ -136,7 +136,7 @@ class bullet extends entity{
 			let thx=this.pos[0]+this.size[0]/2
 			let thy=this.pos[1]+this.size[1]/2
 			let eb=[n.pos[0],n.pos[1],n.pos[0]+n.size[0],n.pos[1]+n.size[1]]
-			return thx>eb[0]&&thy>eb[1]&&thx<eb[2]&&thy<eb[3]&&n.player
+			return thx>eb[0]&&thy>eb[1]&&thx<eb[2]&&thy<eb[3]&&n.player.id!=this.player.id
 		})
 		for(var el of es){
 			console.log("bullet touch",el)
