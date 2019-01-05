@@ -125,6 +125,7 @@ class bullet extends entity{
 		this.type=type
 		this.player=plr
 		this.size=[1,1]
+		this.tmr=5
 	}
 	update(){
 		this.pos[0]+=this.vel[0]/60
@@ -135,16 +136,32 @@ class bullet extends entity{
 			}
 			let thx=this.pos[0]+this.size[0]/2
 			let thy=this.pos[1]+this.size[1]/2
+			let tthx=thx-n.pos[0]-n.size[0]/2
+			let tthy=thy-n.pos[1]-n.size[1]/2
+			tthx=Math.cos(-n.rot)*tthx+Math.sin(-n.rot)*tthy
+			tthy=-Math.sin(-n.rot)*tthx+Math.cos(-n.rot)*tthy
+			tthx+=n.pos[0]+n.size[0]/2
+			tthy+=n.pos[0]+n.size[0]/2
 			let eb=[n.pos[0],n.pos[1],n.pos[0]+n.size[0],n.pos[1]+n.size[1]]
 			return thx>eb[0]&&thy>eb[1]&&thx<eb[2]&&thy<eb[3]&&n.player.id!=this.player.id
 		})
 		for(var el of es){
 			console.log("bullet touch",el)
+			if(el.constructor.name=="troop"){
+				console.log("troop tested")
+			}
 			let k=el.id.slice(1)
-			if(el.id[0]==="E"){
+			if(el.id[0]=="E"){
 				entities[k].hp-=50
 			}else{
 				buildings[k].hp-=50
+			}
+		}
+		this.tmr-=1/60
+		if(this.tmr<=0){
+			entities.splice(this.id.slice(1),1)
+			for(i=0;i<entities.length;i++){
+				entities[i].id="E"+i
 			}
 		}
 		
