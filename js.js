@@ -52,6 +52,9 @@ class building{
 			this.tmr=0
 		}
 		this.tmr+=1
+		if(this.hp<=0){
+			this.remove()
+		}
 	}
 	
 	upgrade(){
@@ -95,6 +98,13 @@ class entity{
 		this.pos[0]+=this.vel[0]/60
 		this.pos[1]+=this.vel[1]/60
 	}
+	remove(){
+		console.log("remove",this)
+		entities.splice(this.id.slice(1),1)
+		for(i=0;i<entities.length;i++){
+			entities[i].id="E"+i
+		}
+	}
 }
 class troop extends entity{
 	constructor(x,y,ro,ty,r,fr,pla,ai,nam,hp,levs,size){
@@ -111,6 +121,12 @@ class troop extends entity{
 		this.maxhp=hp
 		this.ai=ai
 		this.attacking=undefined
+	}
+	update(){
+		super.update()
+		if(this.hp<=0){
+			this.remove()
+		}
 	}
 }
 class collectible extends entity{
@@ -159,10 +175,7 @@ class bullet extends entity{
 		}
 		this.tmr-=1/60
 		if(this.tmr<=0){
-			entities.splice(this.id.slice(1),1)
-			for(i=0;i<entities.length;i++){
-				entities[i].id="E"+i
-			}
+			this.remove()
 		}
 		
 	}
