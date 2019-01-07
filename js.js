@@ -173,6 +173,9 @@ class bullet extends entity{
 				buildings[k].hp-=50
 			}
 		}
+		if(es.length){
+			this.remove()
+		}
 		this.tmr-=1/60
 		if(this.tmr<=0){
 			this.remove()
