@@ -2,6 +2,7 @@ li=require('http')
 prl=require("url")
 file=require("fs")
 pres=JSON.parse(file.readFileSync("pres.json"))
+trps=JSON.parse(file.readFileSync("troops.json"))
 resa=0
 resb=1
 wh=[1500,1500];
@@ -194,6 +195,10 @@ function f(){
 		entities.push(new collectible(Math.random()*wh[0],Math.random()*wh[1],Math.floor(Math.random()*2)))
 	}
 }
+function rp(n,m){
+	for(var d=[n];d.length<m;d=d.concat(d)){}
+	return d.slice(0,m)
+}
 randcol=()=>"#"+Math.floor(Math.random()*16777216).toString(16).padStart(6,"0")
 randhsl=(s,l,ht)=>"hsl("+Math.random()*(ht||360)+","+(s||100)+"%,"+(l||50)+"%)"
 getj=(n,from)=>JSON.parse(decodeURIComponent(ur.slice(from+6)))
@@ -214,7 +219,8 @@ li.createServer(function(r, e){
 			"stroke":randhsl(80,35,240),
 			"score":0,
 			"resources":[0,0],
-			"placed":false
+			"placed":false,
+			"trlev":rp(1,trps.length)
 			})-1
 			datawr=Object.assign({"id":id},datawr)
 			break
