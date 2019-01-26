@@ -278,7 +278,8 @@ li.createServer(function(r, e){
 	"entities":entities.map(a=>{a.type=a.type?a.type:a.__proto__.constructor.name;return a}),
 	"players":players,
 	"bounds":wh,
-	"presets":pres
+	"presets":pres,
+	"trps":trps
 	},datawr)
 	e.write(JSON.stringify(datawr))
 	e.end()
