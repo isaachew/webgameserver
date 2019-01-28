@@ -74,6 +74,20 @@
     [
         {
             "name":"",
+            "type":"troopsd",
+            "size":[25,25],
+            "radius":300,
+            "fra":1,
+            "update":[""],
+            "shoot":[""],
+            "cost":[0,0],
+            "uptrps":["CE"],
+            "levs":1
+        }
+    ],
+    [
+        {
+            "name":"",
             "type":"CG",
             "size":[100,100],
             "radius":300,
