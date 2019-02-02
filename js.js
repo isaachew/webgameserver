@@ -12,7 +12,7 @@ players=[]
 setInterval(f,50/3)
 dtps=Math.pow(2,1/60)
 class building{
-	constructor(x,y,w,h,ro,ty,r,fr,pla,up,sho,nam,hp,nlevs,cosa,cosb,troops){//17 parameters
+	constructor(x,y,w,h,ro,ty,r,fr,pla,up,sho,nam,hp,nlevs,cosa,cosb,troops,uptrp){//18 parameters
 		this.id="B"+buildings.length
 		this.pos=[x,y]
 		this.size=[w,h]
@@ -32,6 +32,7 @@ class building{
 		this.numlevels=nlevs
 		this.cost=[cosa,cosb]
 		this.troops=troops
+		this.uptrp=uptrp
 		buildings.push(this)
 	}
 	inrange(x,y){
@@ -196,8 +197,11 @@ function f(){
 	}
 }
 function rp(n,m){
-	for(var d=[n];d.length<m;d=d.concat(d)){}
-	return d.slice(0,m)
+	 g={}
+	 for(i in m){
+	 	g[i]=n
+	 }
+	 return g
 }
 randcol=()=>"#"+Math.floor(Math.random()*16777216).toString(16).padStart(6,"0")
 randhsl=(s,l,ht)=>"hsl("+Math.random()*(ht||360)+","+(s||100)+"%,"+(l||50)+"%)"
@@ -220,7 +224,7 @@ li.createServer(function(r, e){
 			"score":0,
 			"resources":[0,0],
 			"placed":false,
-			"trlev":rp(1,trps.length)
+			"trlev":rp(1,trps)
 			})-1
 			datawr=Object.assign({"id":id},datawr)
 			break
@@ -239,7 +243,7 @@ li.createServer(function(r, e){
 			bui=pardat.build
 			if(bui){
 				if((players[pardat.id].resources[0]>=bui.cost[0])&&(players[pardat.id].resources[1]>=bui.cost[1])){
-					new building(bui.pos[0],bui.pos[1],bui.size[0],bui.size[1],bui.rot,bui.type,bui.radius,bui.fra,players[pardat.id],Function.apply(undefined,bui.update),Function.apply(undefined,bui.shoot),bui.name,bui.hp,bui.levs,bui.cost[0],bui.cost[1],bui.troops)
+					new building(bui.pos[0],bui.pos[1],bui.size[0],bui.size[1],bui.rot,bui.type,bui.radius,bui.fra,players[pardat.id],Function.apply(undefined,bui.update),Function.apply(undefined,bui.shoot),bui.name,bui.hp,bui.levs,bui.cost[0],bui.cost[1],bui.troops,bui.uptrp)
 					players[pardat.id].resources[0]-=bui.cost[0]
 					players[pardat.id].resources[1]-=bui.cost[1]
 					players[pardat.id].placed=true

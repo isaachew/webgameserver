@@ -81,7 +81,8 @@
             "update":[""],
             "shoot":[""],
             "cost":[0,0],
-            "uptrps":["CE"],
+            "troops":["CE","CE","CE","CE","CE","CE","CE","CE","CE","CE","CE"],
+            "uptrp":["CE","CE","CE","CE","CE","CE","CE","CE","CE","CE","CE"],
             "levs":1
         }
     ],
