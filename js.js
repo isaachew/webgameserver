@@ -11,6 +11,7 @@ entities=[]
 players=[]
 setInterval(f,50/3)
 dtps=Math.pow(2,1/60)
+kv=0
 class building{
 	constructor(x,y,w,h,ro,ty,r,fr,pla,up,sho,nam,hp,nlevs,cosa,cosb,troops,uptrp){//18 parameters
 		this.id="B"+buildings.length
@@ -192,7 +193,7 @@ function f(){
 	for(i of entities){
 		i.update()
 	}
-	if(Math.random()<1/10&&entities.length<1000){//Every 1/6 seconds
+	if(Math.random()<1/10&&entities.length<100){//Every 1/6 seconds
 		entities.push(new collectible(Math.random()*wh[0],Math.random()*wh[1],Math.floor(Math.random()*2)))
 	}
 }
@@ -214,8 +215,12 @@ li.createServer(function(r, e){
 	e.writeHead(200,{'Content-Type':'application/json',"Access-Control-Allow-Origin":li.includes(heo)?heo:"*"})
 	parurl=prl.parse(ur,true)
 	pardat=JSON.parse(parurl.query.data)
+	spla=players
+	spla.sort((a,b)=>(b.score-a.score))
 	switch(parurl.pathname){
 		case "/join":
+			kv+=1
+			console.log(kv)
 			da=pardat
 			id=players.push({"name":da.name||"Anonymous",
 			"id":players.length,
@@ -283,7 +288,8 @@ li.createServer(function(r, e){
 	"players":players,
 	"bounds":wh,
 	"presets":pres,
-	"trps":trps
+	"trps":trps,
+	"playerss":spla
 	},datawr)
 	e.write(JSON.stringify(datawr))
 	e.end()
