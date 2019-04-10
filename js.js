@@ -215,7 +215,7 @@ li.createServer(function(r, e){
 	e.writeHead(200,{'Content-Type':'application/json',"Access-Control-Allow-Origin":li.includes(heo)?heo:"*"})
 	parurl=prl.parse(ur,true)
 	pardat=JSON.parse(parurl.query.data)
-	spla=players
+	spla=players.slice()
 	spla.sort((a,b)=>(b.score-a.score))
 	switch(parurl.pathname){
 		case "/join":
