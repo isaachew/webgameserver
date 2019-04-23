@@ -139,13 +139,13 @@ class collectible extends entity{
 	}
 }
 class bullet extends entity{
-	constructor(x,y,vx,vy,type,plr){
+	constructor(x,y,vx,vy,type,plr,dmg){
 		super(x,y,vx,vy)
 		this.type=type
 		this.player=plr
 		this.size=[1,1]
 		this.tmr=5
-		this.damage=50
+		this.damage=dmg||50
 	}
 	update(){
 		this.pos[0]+=this.vel[0]/60
