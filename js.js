@@ -145,6 +145,7 @@ class bullet extends entity{
 		this.player=plr
 		this.size=[1,1]
 		this.tmr=5
+		this.damage=50
 	}
 	update(){
 		this.pos[0]+=this.vel[0]/60
@@ -171,9 +172,9 @@ class bullet extends entity{
 			}
 			let k=el.id.slice(1)
 			if(el.id[0]=="E"){
-				entities[k].hp-=50
+				entities[k].hp-=this.damage
 			}else{
-				buildings[k].hp-=50
+				buildings[k].hp-=this.damage
 			}
 		}
 		if(es.length){
