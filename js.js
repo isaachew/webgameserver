@@ -127,6 +127,7 @@ class troop extends entity{
 	}
 	update(){
 		super.update()
+		this.ai()
 		if(this.hp<=0){
 			this.remove()
 		}
@@ -294,4 +295,4 @@ li.createServer(function(r, e){
 	},datawr)
 	e.write(JSON.stringify(datawr))
 	e.end()
-}).listen(8080); //Listen on port 8080
+}).listen(8080); //Listen on port 8080> 
