@@ -6,6 +6,13 @@
             "hp":10000,
             "name":"Sample"
             
+        },
+        {
+            "size":25,
+            "cost":[0,0],
+            "hp":12500,
+            "name":"Sample"
+            
         }
     ]
 }

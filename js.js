@@ -280,6 +280,11 @@ li.createServer(function(r, e){
 				}
 				console.log(entities[entities.length-1])
 			}
+			uptp=pardat.uptrp
+			if(uptp){
+				console.log(uptp)
+				players[pardat.id].trlev[uptp]++
+			}	
 			break
 		case "/leave":
 			
