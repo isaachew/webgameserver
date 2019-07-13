@@ -282,8 +282,12 @@ li.createServer(function(r, e){
 			}
 			uptp=pardat.uptrp
 			if(uptp){
-				console.log(uptp)
-				players[pardat.id].trlev[uptp]++
+				cst=trps[uptp][players[pardat.id].trlev[uptp]].cost
+				if(players[pardat.id].resources[0]>=cst[0]&&players[pardat.id].resources[1]>=cst[1]){
+					players[pardat.id].trlev[uptp]++
+					players[pardat.id].resources[0]-=trp.cost[0]
+					players[pardat.id].resources[1]-=trp.cost[1]
+				}
 			}	
 			break
 		case "/leave":
