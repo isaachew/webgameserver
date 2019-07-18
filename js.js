@@ -3,8 +3,6 @@ prl=require("url")
 file=require("fs")
 pres=JSON.parse(file.readFileSync("pres.json"))
 trps=JSON.parse(file.readFileSync("troops.json"))
-resa=0
-resb=1
 wh=[1500,1500];
 buildings=[]
 entities=[]
@@ -156,13 +154,13 @@ class bullet extends entity{
 				return false
 			}
 			let thx=this.pos[0]+this.size[0]/2
-			let thy=this.pos[1]+this.size[1]/2
+			let thy=this.pos[1]+this.size[1]/2/*
 			let tthx=thx-n.pos[0]-n.size[0]/2
 			let tthy=thy-n.pos[1]-n.size[1]/2
 			tthx=Math.cos(-n.rot)*tthx+Math.sin(-n.rot)*tthy
 			tthy=-Math.sin(-n.rot)*tthx+Math.cos(-n.rot)*tthy
 			tthx+=n.pos[0]+n.size[0]/2
-			tthy+=n.pos[0]+n.size[0]/2
+			tthy+=n.pos[0]+n.size[0]/2*/
 			let eb=[n.pos[0],n.pos[1],n.pos[0]+n.size[0],n.pos[1]+n.size[1]]
 			return thx>eb[0]&&thy>eb[1]&&thx<eb[2]&&thy<eb[3]&&n.player.id!=this.player.id
 		})
@@ -260,7 +258,13 @@ li.createServer(function(r, e){
 			if(upgr){
 				bui=buildings[upgr.slice(1)]
 				if(bui.player.id==pardat.id){
-					bui.upgrade()
+					console.log(bui)
+					ttm=pres.find((x)=>(x[0].type==bui.ty))[bui.level]
+					if((players[pardat.id].resources[0]>=ttm.cost[0])&&(players[pardat.id].resources[1]>=ttm.cost[1])){
+						bui.upgrade()
+						players[pardat.id].resources[0]-=ttm.cost[0]
+						players[pardat.id].resources[1]-=ttm.cost[1]
+					}
 				}
 			}
 			sell=pardat.sell
@@ -282,11 +286,12 @@ li.createServer(function(r, e){
 			}
 			uptp=pardat.uptrp
 			if(uptp){
-				cst=trps[uptp][players[pardat.id].trlev[uptp]].cost
+				ttp=trps[uptp][players[pardat.id].trlev[uptp]]
+				cst=ttp.cost
 				if(players[pardat.id].resources[0]>=cst[0]&&players[pardat.id].resources[1]>=cst[1]){
 					players[pardat.id].trlev[uptp]++
-					players[pardat.id].resources[0]-=trp.cost[0]
-					players[pardat.id].resources[1]-=trp.cost[1]
+					players[pardat.id].resources[0]-=cst[0]
+					players[pardat.id].resources[1]-=cst[1]
 				}
 			}	
 			break
