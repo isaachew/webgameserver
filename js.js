@@ -49,7 +49,7 @@ class building{
 		})
 		if(sents.length>0&&this.tmr>=this.fra){
 			var ent=sents[sents.length-1]
-			eval("("+this.shoot+").bind("+JSON.stringify(this)+")("+JSON.stringify(ent)+")")
+			eval("("+this.shoot+")").bind(this)(ent)
 			this.tmr=0
 		}
 		this.tmr+=1
@@ -125,7 +125,7 @@ class troop extends entity{
 	}
 	update(){
 		super.update()
-		this.ai()
+		eval("("+this.ai+")").bind(this)(buildings,entities)
 		if(this.hp<=0){
 			this.remove()
 		}

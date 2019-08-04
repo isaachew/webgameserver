@@ -4,8 +4,8 @@
             "size":25,
             "cost":[0,0],
             "hp":10000,
-            "name":"Sample"
-            
+            "name":"Sample",
+            "ai":["bu","en",""]
         },
         {
             "size":25,
