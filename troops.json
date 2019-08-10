@@ -5,7 +5,7 @@
             "cost":[0,0],
             "hp":10000,
             "name":"Sample",
-            "ai":["bu","en",""]
+            "ai":["bu","en","this.pos=bu?[bu[0].pos[0]+50,bu[0].pos[1]]:this.pos"]
         },
         {
             "size":25,
