@@ -210,9 +210,7 @@ getj=(n,from)=>JSON.parse(decodeURIComponent(ur.slice(from+6)))
 li.createServer(function(r, e){
 	datawr={}
 	ur=r.url
-	li=["null","http://webgame-isaachew.c9users.io","https://webgame-isaachew.c9users.io"]
-	heo=r.headers.origin
-	e.writeHead(200,{'Content-Type':'application/json',"Access-Control-Allow-Origin":li.includes(heo)?heo:"*"})
+	e.writeHead(200,{'Content-Type':'application/json',"Access-Control-Allow-Origin":"*"})
 	parurl=prl.parse(ur,true)
 	pardat=JSON.parse(parurl.query.data)
 	spla=players.slice()
@@ -296,7 +294,8 @@ li.createServer(function(r, e){
 			}	
 			break
 		case "/leave":
-			
+			console.log("/leave")
+			players[pardat.id]=undefined
 	}
 	datawr=Object.assign(
 	{"buildings":buildings,
