@@ -227,7 +227,8 @@ li.createServer(function(r, e){
 			"score":0,
 			"resources":[0,0],
 			"placed":false,
-			"trlev":rp(1,trps)
+			"trlev":rp(1,trps),
+			"left":false
 			})-1
 			datawr=Object.assign({"id":id},datawr)
 			break
@@ -295,7 +296,7 @@ li.createServer(function(r, e){
 			break
 		case "/leave":
 			console.log("/leave")
-			players[pardat.id]=undefined
+			players[pardat.id].left=true
 	}
 	datawr=Object.assign(
 	{"buildings":buildings,
