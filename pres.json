@@ -46,7 +46,8 @@
         },
 	{
             "update":["players[this.player.id].resources[1]+=0.01;players[this.player.id].resources[1]=Math.round(players[this.player.id].resources[1]*200)/200"],
-            "speed":"0.6/s"
+            "speed":"0.6/s",
+            "cost":[75,75]
         }
     ],
     [
