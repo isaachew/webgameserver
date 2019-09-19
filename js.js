@@ -247,10 +247,18 @@ li.createServer(function(r, e){
 			bui=pardat.build
 			if(bui){
 				if((players[pardat.id].resources[0]>=bui.cost[0])&&(players[pardat.id].resources[1]>=bui.cost[1])){
-					new building(bui.pos[0],bui.pos[1],bui.size[0],bui.size[1],bui.rot,bui.type,bui.radius,bui.fra,players[pardat.id],Function.apply(undefined,bui.update),Function.apply(undefined,bui.shoot),bui.name,bui.hp,bui.levs,bui.cost[0],bui.cost[1],bui.troops,bui.uptrp)
-					players[pardat.id].resources[0]-=bui.cost[0]
-					players[pardat.id].resources[1]-=bui.cost[1]
-					players[pardat.id].placed=true
+					val=true
+					for(i of buildings){
+						xdf=bui.pos[0]-i.pos[0]
+						ydf=bui.pos[1]-i.pos[1]
+						if(xdf>-bui.size[0]&&xdf<i.size[0]&&ydf>-bui.size[1]&&ydf<i.size[1])val=false
+					}
+					if(val){
+						new building(bui.pos[0],bui.pos[1],bui.size[0],bui.size[1],bui.rot,bui.type,bui.radius,bui.fra,players[pardat.id],Function.apply(undefined,bui.update),Function.apply(undefined,bui.shoot),bui.name,bui.hp,bui.levs,bui.cost[0],bui.cost[1],bui.troops,bui.uptrp)
+						players[pardat.id].resources[0]-=bui.cost[0]
+						players[pardat.id].resources[1]-=bui.cost[1]
+						players[pardat.id].placed=true
+					}
 				}
 			}
 			upgr=pardat.upgrade

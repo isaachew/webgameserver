@@ -5,7 +5,7 @@
             "cost":[0,0],
             "hp":10000,
             "name":"Sample",
-            "ai":["bu","en","this.pos=bu?[bu[0].pos[0]+50,bu[0].pos[1]]:this.pos"]
+            "ai":["bu","en","buil=bu.length?bu:undefined;dxy=[buil.pos[0]-this.pos[0],buil.pos[1]-this.pos[1]];this.vel=buil?[buil.pos[0]-this.pos[0],buil.pos[1]-this.pos[1]]:this.vel"]
         },
         {
             "size":25,
