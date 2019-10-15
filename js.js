@@ -111,7 +111,8 @@ class troop extends entity{
 	constructor(x,y,ro,ty,r,fr,pla,ai,nam,hp,levs,size){
 		super(x,y,0,0,ro)
 		this.atr=r//Attack range
-		this.fir=fr//Fire rate (seconds)
+		this.fir=fr//Fire rate (number of frames before shooting)
+		this.frt=fr
 		this.player=pla
 		this.nlevs=levs
 		this.level=1
@@ -121,10 +122,10 @@ class troop extends entity{
 		this.hp=hp
 		this.maxhp=hp
 		this.ai=ai
-		this.attacking=undefined
 	}
 	update(){
 		super.update()
+		this.frt=this.frt?(this.frt-1):0
 		eval("("+this.ai+")").bind(this)(buildings,entities)
 		if(this.hp<=0){
 			this.remove()
