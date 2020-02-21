@@ -22,11 +22,11 @@
             "shoot":[""],
             "cost":[50,50],
             "levs":1,
-            "speed":"0.3/s"
+            "Speed":"0.3/s"
         },
     	{
             "update":["players[this.player.id].resources[0]+=0.01;players[this.player.id].resources[0]=Math.round(players[this.player.id].resources[0]*200)/200"],
-            "speed":"0.6/s",
+            "Speed":"0.6/s",
             "cost":[75,75]
         }
     ],
@@ -41,18 +41,18 @@
             "shoot":[""],
             "cost":[50,50],
             "levs":1,
-	    "speed":"0.3/s"
+	    "Speed":"0.3/s"
         },
 	{
             "update":["players[this.player.id].resources[1]+=0.01;players[this.player.id].resources[1]=Math.round(players[this.player.id].resources[1]*200)/200"],
-            "speed":"0.6/s",
+            "Speed":"0.6/s",
             "cost":[75,75]
         }
     ],
     [
         {
             "name":"Rapid Shot",
-            "type":"CE",
+            "type":"CR",
             "size":[25,25],
             "radius":200,
             "fra":0.1,
@@ -73,10 +73,21 @@
             "size":[25,25],
             "radius":500,
             "fra":0.5,
-            "update":[""],
-            "shoot":[""],
+            "upd":[""],
             "cost":[0,0],
-            "levs":1,
+            "levs":3,
+            "shoot":[
+                "en",
+                "entities.push(new bullet(this.pos[0]+this.size[0]/2,this.pos[1]+this.size[1]/2,en.pos[0]-this.pos[0]-this.size[0]/2+en.size[0]/2,en.pos[1]-this.pos[1]-this.size[1]/2+en.size[1]/2,0,this.player,48))"
+                ]
+        },
+	{
+            "name":"Long Ran",
+            "type":"CE",
+            "size":[25,25],
+            "radius":500,
+            "fra":0.5,
+            "cost":[0,0],
             "shoot":[
                 "en",
                 "entities.push(new bullet(this.pos[0]+this.size[0]/2,this.pos[1]+this.size[1]/2,en.pos[0]-this.pos[0]-this.size[0]/2+en.size[0]/2,en.pos[1]-this.pos[1]-this.size[1]/2+en.size[1]/2,0,this.player,48))"
