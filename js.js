@@ -66,7 +66,7 @@ class building{
 		try{
 			for(i in allc){
 				console.log(i,allc[i])
-				if(["shoot","update"].includes(i)){
+				if(["shoot","upd"].includes(i)){
 					this[i]=Function.apply(null,allc[i])
 				}else{
 					this[i]=allc[i]
