@@ -11,7 +11,7 @@ setInterval(f,50/3)
 dtps=Math.pow(2,1/60)
 kv=0
 class building{
-	constructor(x,y,w,h,ro,ty,r,fr,pla,up,sho,nam,hp,nlevs,cosa,cosb,troops,uptrp){//18 parameters
+	constructor(x,y,w,h,ro,ty,r,fr,pla,up,sho,nam,hp,cosa,cosb,troops,uptrp){//18 parameters
 		this.id="B"+buildings.length
 		this.pos=[x,y]
 		this.size=[w,h]
@@ -28,7 +28,6 @@ class building{
 		this.hp=hp||1000
 		this.maxhp=this.hp
 		this.level=1
-		this.numlevels=nlevs
 		this.cost=[cosa,cosb]
 		this.troops=troops
 		this.uptrp=uptrp
@@ -109,13 +108,12 @@ class entity{
 	}
 }
 class troop extends entity{
-	constructor(x,y,ro,ty,r,fr,pla,ai,nam,hp,levs,size){
+	constructor(x,y,ro,ty,r,fr,pla,ai,nam,hp,size){
 		super(x,y,0,0,ro)
 		this.atr=r//Attack range
 		this.fir=fr//Fire rate (number of frames before shooting)
 		this.frt=fr
 		this.player=pla
-		this.nlevs=levs
 		this.level=1
 		this.type=ty
 		this.ty=ty
@@ -254,7 +252,7 @@ li.createServer(function(r, e){
 						if(xdf>-bui.size[0]&&xdf<i.size[0]&&ydf>-bui.size[1]&&ydf<i.size[1])val=false
 					}
 					if(val){
-						new building(bui.pos[0],bui.pos[1],bui.size[0],bui.size[1],bui.rot,bui.type,bui.radius,bui.fra,players[pardat.id],Function.apply(undefined,bui.upd),Function.apply(undefined,bui.shoot),bui.name,bui.hp,bui.levs,bui.cost[0],bui.cost[1],bui.troops,bui.uptrp)
+						new building(bui.pos[0],bui.pos[1],bui.size[0],bui.size[1],bui.rot,bui.type,bui.radius,bui.fra,players[pardat.id],Function.apply(undefined,bui.upd),Function.apply(undefined,bui.shoot),bui.name,bui.hp,bui.cost[0],bui.cost[1],bui.troops,bui.uptrp)
 						players[pardat.id].resources[0]-=bui.cost[0]
 						players[pardat.id].resources[1]-=bui.cost[1]
 						players[pardat.id].placed=true
@@ -285,7 +283,7 @@ li.createServer(function(r, e){
 			trp=pardat.troop
 			if(trp){
 				if(players[pardat.id].resources[0]>=trp.cost[0]&&players[pardat.id].resources[1]>=trp.cost[1]){
-					entities.push(new troop(trp.pos[0],trp.pos[1],Math.random()*360,trp.type,trp.radius,trp.fr,players[pardat.id],Function.apply(null,trp.ai),trp.name,trp.hp,trp.levs,trp.size))
+					entities.push(new troop(trp.pos[0],trp.pos[1],Math.random()*360,trp.type,trp.radius,trp.fr,players[pardat.id],Function.apply(null,trp.ai),trp.name,trp.hp,trp.size))
 					players[pardat.id].resources[0]-=trp.cost[0]
 					players[pardat.id].resources[1]-=trp.cost[1]
 				}
