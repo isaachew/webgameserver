@@ -1,5 +1,5 @@
-[
-    [
+{
+    "mrk":[
         {
             "name":"Marker",
             "type":"mrk",
@@ -11,7 +11,7 @@
             "levs":1
         }
     ],
-    [
+    "CC":[
         {
             "name":"Resource Creator",
             "type":"CC",
@@ -29,7 +29,7 @@
             "cost":[35,35]
         }
     ],
-    [
+    "CD":[
         {
             "name":"Resource Creator",
             "type":"CD",
@@ -47,7 +47,7 @@
             "cost":[35,35]
         }
     ],
-    [
+    "CR":[
         {
             "name":"Rapid Shot",
             "type":"CR",
@@ -63,7 +63,7 @@
                 ]
         }
     ],
-    [
+    "CE":[
         {
             "name":"Long Range",
             "type":"CE",
@@ -90,7 +90,7 @@
                 ]
         }
     ],
-    [
+    "CF":[
         {
             "name":"Turret",
             "type":"CF",
@@ -117,7 +117,7 @@
                 ]
         }
     ],
-    [
+    "troopsc":[
         {
             "name":"",
             "type":"troopsc",
@@ -131,7 +131,7 @@
             "levs":1
         }
     ],
-    [
+    "troopsd":[
         {
             "name":"",
             "type":"troopsd",
@@ -146,7 +146,7 @@
             "levs":1
         }
     ],
-    [
+    "CG":[
         {
             "name":"",
             "type":"CG",
@@ -159,4 +159,4 @@
             "levs":1
         }
     ]
-]
+}

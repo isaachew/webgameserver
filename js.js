@@ -60,7 +60,7 @@ class building{
 	
 	upgrade(){
 		console.log("upgrade")
-		var allc=pres.find((el)=>(el[0].type===this.ty))[this.level]
+		var allc=pres[this.ty][this.level]
 		console.log(JSON.stringify(allc))
 		try{
 			for(i in allc){
@@ -121,6 +121,7 @@ class troop extends entity{
 		this.hp=hp
 		this.maxhp=hp
 		this.ai=ai
+		this.name=nam
 	}
 	update(){
 		super.update()
@@ -264,7 +265,7 @@ li.createServer(function(r, e){
 				bui=buildings[upgr.slice(1)]
 				if(bui.player.id==pardat.id){
 					console.log(bui)
-					ttm=pres.find((x)=>(x[0].type==bui.ty))[bui.level]
+					ttm=pres[bui.ty][bui.level]
 					if((players[pardat.id].resources[0]>=ttm.cost[0])&&(players[pardat.id].resources[1]>=ttm.cost[1])){
 						bui.upgrade()
 						players[pardat.id].resources[0]-=ttm.cost[0]
