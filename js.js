@@ -11,26 +11,26 @@ setInterval(f,50/3)
 dtps=Math.pow(2,1/60)
 kv=0
 class building{
-	constructor(x,y,w,h,ro,ty,r,fr,pla,up,sho,nam,hp,cosa,cosb,troops,uptrp){//18 parameters
+	constructor(bui,pla,pos){
 		this.id="B"+buildings.length
-		this.pos=[x,y]
-		this.size=[w,h]
-		this.rot=ro
-		this.radius=r//Attack radius
-		this.fra=fr//Fire rate in seconds
+		this.pos=pos
+		this.size=bui.size
+		this.rot=0
+		this.ty=bui.ty//Internal type
+		this.type=bui.ty//Display type
+		this.radius=bui.radius//Attack radius
+		this.fra=bui.fra//Fire rate in seconds
 		this.tmr=0
 		this.player=pla
-		this.upd=up||(()=>{})
-		this.ty=ty
-		this.type=ty
-		this.name=nam
-		this.shoot=sho||(()=>{})
-		this.hp=hp||1000
+		this.upd=Function.apply(undefined,bui.upd)||(()=>{})
+		this.name=bui.name
+		this.shoot=Function.apply(undefined,bui.shoot)||(()=>{})
+		this.hp=bui.hp||1000
 		this.maxhp=this.hp
 		this.level=1
-		this.cost=[cosa,cosb]
-		this.troops=troops
-		this.uptrp=uptrp
+		this.cost=bui.cost
+		this.troops=bui.troops
+		this.uptrp=bui.uptrp
 		buildings.push(this)
 	}
 	inrange(x,y){
@@ -155,13 +155,7 @@ class bullet extends entity{
 				return false
 			}
 			let thx=this.pos[0]+this.size[0]/2
-			let thy=this.pos[1]+this.size[1]/2/*
-			let tthx=thx-n.pos[0]-n.size[0]/2
-			let tthy=thy-n.pos[1]-n.size[1]/2
-			tthx=Math.cos(-n.rot)*tthx+Math.sin(-n.rot)*tthy
-			tthy=-Math.sin(-n.rot)*tthx+Math.cos(-n.rot)*tthy
-			tthx+=n.pos[0]+n.size[0]/2
-			tthy+=n.pos[0]+n.size[0]/2*/
+			let thy=this.pos[1]+this.size[1]/2
 			let eb=[n.pos[0],n.pos[1],n.pos[0]+n.size[0],n.pos[1]+n.size[1]]
 			return thx>eb[0]&&thy>eb[1]&&thx<eb[2]&&thy<eb[3]&&n.player.id!=this.player.id
 		})
@@ -243,8 +237,12 @@ li.createServer(function(r, e){
 				}
 				players[pardat.id].score+=1
 			}
-			bui=pardat.build
-			if(bui){
+			buin=pardat.build
+			if(buin){
+				console.log(buin)
+				pos=buin[1]
+				bui=pres[buin[0]][0]
+				bui.ty=buin[0]
 				if((players[pardat.id].resources[0]>=bui.cost[0])&&(players[pardat.id].resources[1]>=bui.cost[1])){
 					val=true
 					for(i of buildings){
@@ -253,7 +251,7 @@ li.createServer(function(r, e){
 						if(xdf>-bui.size[0]&&xdf<i.size[0]&&ydf>-bui.size[1]&&ydf<i.size[1])val=false
 					}
 					if(val){
-						new building(bui.pos[0],bui.pos[1],bui.size[0],bui.size[1],bui.rot,bui.type,bui.radius,bui.fra,players[pardat.id],Function.apply(undefined,bui.upd),Function.apply(undefined,bui.shoot),bui.name,bui.hp,bui.cost[0],bui.cost[1],bui.troops,bui.uptrp)
+						new building(bui,players[pardat.id],pos)
 						players[pardat.id].resources[0]-=bui.cost[0]
 						players[pardat.id].resources[1]-=bui.cost[1]
 						players[pardat.id].placed=true
